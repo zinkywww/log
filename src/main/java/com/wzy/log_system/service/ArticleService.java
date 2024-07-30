@@ -14,4 +14,6 @@ public interface ArticleService {
     Article getById(Integer id);
 
     void update(Article article);
+
+    List<Article> getByUserId(Integer id);
 }

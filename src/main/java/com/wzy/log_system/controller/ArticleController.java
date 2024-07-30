@@ -2,10 +2,16 @@ package com.wzy.log_system.controller;
 
 import com.wzy.log_system.entity.Article;
 import com.wzy.log_system.entity.Result;
+import com.wzy.log_system.entity.User;
 import com.wzy.log_system.service.ArticleService;
+import com.wzy.log_system.utils.JwtUtils;
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -14,10 +20,14 @@ public class ArticleController {
     private ArticleService articleService;
 
     @GetMapping("/articles")
-    public Result getAll() {
+    public Result getAll(HttpServletRequest request) {
         log.info("获取所有文章");
-        return Result.success(articleService.getAll());
+        String token = request.getHeader("token");
+        Claims claims = JwtUtils.parseJwt(token);
+        List<Article> list = articleService.getByUserId((Integer)claims.get("id"));
+        return Result.success(list);
     }
+
 
     @PostMapping("/articles")
     public Result addArticle(@RequestBody Article article) {

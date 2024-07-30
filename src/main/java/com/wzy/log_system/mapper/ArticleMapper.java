@@ -23,4 +23,7 @@ public interface ArticleMapper {
 
     @Update("update t_article set title=#{title},content=#{content} where id = #{id}")
     int updateArticle(Article article);
+
+    @Select("select * from t_article where userId=#{userId}")
+    List<Article> getArticleByUserId(Integer userId);
 }
