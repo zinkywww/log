@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Article {
     private int id;
-    //作为外键与user表关联
+    //作为外键与user表关联。
     private int userId;
     private String title;
     private String content;
