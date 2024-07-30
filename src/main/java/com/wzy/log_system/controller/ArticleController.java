@@ -51,7 +51,7 @@ public class ArticleController {
     @GetMapping("/articles/{id}")
     public Result getArticleById(@PathVariable Integer id) {
         log.info("通过id获取文章");
-        //查询ridis缓存
+        //查询redis缓存
         String articleCache = stringRedisTemplate.opsForValue().get(""+id);
         if(articleCache !=null){
             return Result.success(articleCache);
@@ -70,9 +70,5 @@ public class ArticleController {
         articleService.update(article);
         return Result.success();
     }
-
-
-
-
 
 }
