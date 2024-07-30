@@ -21,7 +21,7 @@ public class LoginCheckFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String uri = request.getRequestURI();
-        if (uri.equals("/login")) {
+        if (uri.equals("/login")||uri.equals("/register")) {
             filterChain.doFilter(request, response);
             return;
         }

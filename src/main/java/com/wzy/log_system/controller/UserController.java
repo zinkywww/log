@@ -24,7 +24,7 @@ public class UserController {
         return Result.success(list);
     }
 
-    @PutMapping("/users")
+    @PutMapping("/register")
     public Result addUser(@RequestBody User user){
         log.info("增加用户");
         User u = userService.getByUserName(user.getUsername());
