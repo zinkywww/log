@@ -37,7 +37,7 @@ class LogSystemApplicationTests {
     public void parseJWT(){
         Claims claims =Jwts.parser()
                 .setSigningKey("abcdefghijklmnopqrstuvwxyzabcdef")
-                .parseClaimsJws("eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZXhwIjoxNzIyMzE0MDQwLCJ1c2VybmFtZSI6ImtvYmUifQ.CFI0I5Xs_boeQDP30zp9s38YOfPogGAA2cuQ_PQKViw")
+                .parseClaimsJws("eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MiwidXNlcm5hbWUiOiIxMTEiLCJleHAiOjE3MjIzMTk1NTl9.U3MFKnVupxwezxPJP9icpB29SkVDr_1u8vXjcKYfhO8")
                 .getBody();
         System.out.println(claims);
     }

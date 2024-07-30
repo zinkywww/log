@@ -17,7 +17,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/users")
+    @GetMapping("/admin")
     public Result findAll(){
         log.info("查询所有用户");
         List<User> list=userService.getAll();
@@ -37,7 +37,7 @@ public class UserController {
         return Result.error("USERNAME_EXIST");
     }
 
-    @DeleteMapping("users/{id}")
+    @DeleteMapping("admin/{id}")
     public Result deleteUser(@PathVariable("id") Integer id){
         log.info("根据id删除用户");
         userService.delete(id);

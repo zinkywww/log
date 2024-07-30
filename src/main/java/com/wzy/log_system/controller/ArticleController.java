@@ -21,14 +21,13 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
 
     @GetMapping("/articles")
     public Result getAll(HttpServletRequest request) {
         log.info("获取所有文章");
         String token = request.getHeader("token");
         Claims claims = JwtUtils.parseJwt(token);
+        log.info(claims.toString());
         List<Article> list = articleService.getByUserId((Integer)claims.get("id"));
         return Result.success(list);
     }
@@ -51,17 +50,7 @@ public class ArticleController {
     @GetMapping("/articles/{id}")
     public Result getArticleById(@PathVariable Integer id) {
         log.info("通过id获取文章");
-        //查询redis缓存
-
-        String articleCache = stringRedisTemplate.opsForValue().get(""+id);
-        if(articleCache !=null){
-            return Result.success(articleCache);
-        }
-
-        //未查询到则查数据库，并更新redis
         Article article = articleService.getById(id);
-        String articleJson  =JSONObject.toJSONString(article);
-        stringRedisTemplate.opsForValue().set(""+id, articleJson);
         return Result.success(article);
     }
 

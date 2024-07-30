@@ -3,6 +3,8 @@ package com.wzy.log_system.service.impl;
 import com.wzy.log_system.entity.Article;
 import com.wzy.log_system.mapper.ArticleMapper;
 import com.wzy.log_system.service.ArticleService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import java.util.List;
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
+    private static final Logger log = LoggerFactory.getLogger(ArticleServiceImpl.class);
     @Autowired
     private RedisTemplate redisTemplate;
 
@@ -58,9 +61,10 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<Article> getByUserId(Integer userId) {
-        List<Article> articleCache =(List<Article>) redisTemplate.opsForValue().get("articleList:" + userId);
-        if (articleCache != null&& !articleCache.isEmpty()) {
-            return articleCache;
+        Object articleCache = redisTemplate.opsForValue().get("articleList:" + userId);
+        if (articleCache != null) {
+            log.info("查询缓存成功");
+            return (List<Article>) articleCache;
         }
         List<Article> articleList = articleMapper.getArticleByUserId(userId);
         redisTemplate.opsForValue().set("articleList:" + userId, articleList);
