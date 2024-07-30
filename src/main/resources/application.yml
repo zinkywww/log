@@ -1,4 +1,6 @@
 
+server:
+  port: 8080
 spring:
   datasource:
     # ???????
@@ -29,5 +31,4 @@ mybatis:
 logging:
   level:
     com.wzy.mapper: debug
-server:
-  port: 8080
+

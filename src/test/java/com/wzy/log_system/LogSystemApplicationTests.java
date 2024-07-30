@@ -1,66 +1,48 @@
 package com.wzy.log_system;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.wzy.log_system.entity.Article;
 import com.wzy.log_system.entity.User;
 import com.wzy.log_system.mapper.ArticleMapper;
 import com.wzy.log_system.mapper.UserMapper;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.devtools.classpath.ClassPathFileSystemWatcher;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+import java.util.Date;
+import java.util.HashMap;
+
+//@SpringBootTest
 class LogSystemApplicationTests {
 
-    @Resource
-    private UserMapper userMapper;
-    @Resource
-    private ArticleMapper articleMapper;
-
-
     @Test
-    void contextLoads() {
-        System.out.println(articleMapper.getArticleById(1).toString());
-//        studentMapper.getStudentById(1);
-//        articleMapper.getArticleById(1);
-        System.out.println("hello world");
+    void genJWT(){
+        HashMap<String,Object> claims = new HashMap<>();
+        claims.put("id",1);
+        claims.put("username","kobe");
+        String jwt=Jwts.builder()
+                .signWith(SignatureAlgorithm.HS256,"abcdefghijklmnopqrstuvwxyzabcdef")
+                .setClaims(claims)
+                .setExpiration(new Date(System.currentTimeMillis()+3600*1000))
+                .compact();
+        System.out.println(jwt);
     }
 
     @Test
-    void testAddArticle(){
-        Article article = new Article();
-        article.setTitle("Python");
-        article.setContent("python入门到放弃..");
-        int i = articleMapper.addArticle(article);
-        System.out.println(i);
+    public void parseJWT(){
+        Claims claims =Jwts.parser()
+                .setSigningKey("abcdefghijklmnopqrstuvwxyzabcdef")
+                .parseClaimsJws("eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZXhwIjoxNzIyMzE0MDQwLCJ1c2VybmFtZSI6ImtvYmUifQ.CFI0I5Xs_boeQDP30zp9s38YOfPogGAA2cuQ_PQKViw")
+                .getBody();
+        System.out.println(claims);
     }
 
-    @Test
-    void testUpdateArticle(){
-        Article article = new Article();
-        article.setId(3);
-        article.setTitle("Python");
-        article.setContent("python入门到精通..");
-        int i = articleMapper.updateArticle(article);
-        System.out.println(i);
-    }
-    @Test
-    void deleteArticle(){
-        int i = articleMapper.deleteArticleById(4);
-        System.out.println(i);
-    }
-    @Test
-    void testUser(){
-        User user = userMapper.getUserByUserId("111");
-        System.out.println(user);
-        user.setPassword("222");
-        userMapper.updateUser(user);
-        System.out.println(user);
-        userMapper.deleteUser(user);
 
-
-
-
-    }
 
 
 
