@@ -52,6 +52,7 @@ public class ArticleController {
     public Result getArticleById(@PathVariable Integer id) {
         log.info("通过id获取文章");
         //查询redis缓存
+
         String articleCache = stringRedisTemplate.opsForValue().get(""+id);
         if(articleCache !=null){
             return Result.success(articleCache);

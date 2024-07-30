@@ -13,6 +13,11 @@ spring:
     username: root
     # ???????
     password: 18051018
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      database: 1
 
 # mybatis ???
 mybatis:
