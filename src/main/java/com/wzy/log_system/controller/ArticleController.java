@@ -1,5 +1,6 @@
 package com.wzy.log_system.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.wzy.log_system.entity.Article;
 import com.wzy.log_system.entity.Result;
 import com.wzy.log_system.entity.User;
@@ -9,6 +10,7 @@ import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +20,9 @@ import java.util.List;
 public class ArticleController {
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @GetMapping("/articles")
     public Result getAll(HttpServletRequest request) {
@@ -46,7 +51,15 @@ public class ArticleController {
     @GetMapping("/articles/{id}")
     public Result getArticleById(@PathVariable Integer id) {
         log.info("通过id获取文章");
+        if(stringRedisTemplate.opsForValue().get(""+id)!=null){
+            String article = stringRedisTemplate.opsForValue().get(id);
+            return Result.success(article);
+        }
+
+        //未查询到则查数据库，并更新redis
         Article article = articleService.getById(id);
+        String articleJson  =JSONObject.toJSONString(article);
+        stringRedisTemplate.opsForValue().set(""+id, articleJson);
         return Result.success(article);
     }
 

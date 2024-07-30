@@ -16,7 +16,7 @@ public interface UserMapper {
     @Select("select * from t_user")
     List<User> getAllUsers();
 
-    @Insert("insert into t_user values (null,#{userId},#{password})")
+    @Insert("insert into t_user values (null,#{username},#{password})")
     void insertUser(User user);
 
     @Update("update t_user set userId=#{userId},password = #{password} where id=#{id}")
