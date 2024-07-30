@@ -51,9 +51,10 @@ public class ArticleController {
     @GetMapping("/articles/{id}")
     public Result getArticleById(@PathVariable Integer id) {
         log.info("通过id获取文章");
-        if(stringRedisTemplate.opsForValue().get(""+id)!=null){
-            String article = stringRedisTemplate.opsForValue().get(id);
-            return Result.success(article);
+        //查询ridis缓存
+        String articleCache = stringRedisTemplate.opsForValue().get(""+id);
+        if(articleCache !=null){
+            return Result.success(articleCache);
         }
 
         //未查询到则查数据库，并更新redis
